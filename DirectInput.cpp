@@ -29,6 +29,13 @@
 #include "DirectInput.h"
 #include "XInputController.h"
 #include <math.h>
+//#include <tgmath.h>
+
+#define PI 3.14159265359
+#define PI1_4 0.78539816339
+#define PI1_2 1.57079632679
+#define PI3_4 2.35619449019
+
 
 // ProtoTypes //
 HRESULT AcquireDevice( LPDIRECTINPUTDEVICE8 lpDirectInputDevice );
@@ -121,6 +128,13 @@ inline bool GetJoyPadPOV( PDWORD dwDegree, BYTE AxeId )
 	}
 	
 	return bPressed;
+}
+
+long sclamp(long val, long min, long max)
+{
+    if (val <= min) return min;
+    if (val >= max) return max;
+    return val;
 }
 
 // Fill in button states and axis states for controller indexController, into the struct pdwData.
@@ -496,36 +510,45 @@ bool GetNControllerInput ( const int indexController, LPDWORD pdwData )
 
 	if( pcController->fRealN64Range && ( lAxisValueX || lAxisValueY ))
 	{
-		long lAbsoluteX = ( lAxisValueX > 0 ) ? lAxisValueX : -lAxisValueX;
-		long lAbsoluteY = ( lAxisValueY > 0 ) ? lAxisValueY : -lAxisValueY;
+		double lAbsoluteX = ( lAxisValueX > 0 ) ? lAxisValueX : -lAxisValueX;
+		double lAbsoluteY = ( lAxisValueY > 0 ) ? lAxisValueY : -lAxisValueY;
 
-		long lRangeX;
-		long lRangeY;
+		double range = 127.0;
+		double diagonalPercent = 0.16;
+		double diagonalMax = range * diagonalPercent;
 
-		if(	lAbsoluteX > lAbsoluteY )
-		{
-			lRangeX = MAXAXISVALUE;
-			lRangeY = lRangeX * lAbsoluteY / lAbsoluteX;
+		double newX = lAbsoluteX * range / MAXAXISVALUE;
+		double newY = lAbsoluteY * range / MAXAXISVALUE;
+
+		double lim_x = range - (abs(sclamp(newY, -diagonalMax, diagonalMax)));
+		double lim_y = range - (abs(sclamp(newX, -diagonalMax, diagonalMax)));
+
+		if (lim_x < newX) {
+			newX = lim_x;
+			newY = newY * (lim_x / newX);
 		}
-		else
-		{
-			lRangeY = MAXAXISVALUE;
-			lRangeX = lRangeY * lAbsoluteX / lAbsoluteY;
+		if (-lim_x > newX) {
+			newX = -lim_x;
+			newY = newY * (-lim_x / newX);
+		}
+		if (lim_y < newY) {
+			newY = lim_y;
+			newX = newX * (lim_y / newY);
+		}
+		if (-lim_y > newY) {
+			newY = -lim_y;
+			newX = newX * (-lim_y / newY);
 		}
 
-		// TODO: optimize this --rabid
-		double dRangeDiagonal = sqrt((double)(lRangeX * lRangeX + lRangeY * lRangeY));
-//		__asm{
-//			fld fRangeDiagonal
-//			fsqrt
-//			fstp fRangeDiagonal
-//			fwait
-//		}
-		double dRel = MAXAXISVALUE / dRangeDiagonal;
+		newX = round((newX / range) * MAXAXISVALUE);
+		newY = round((newY / range) * MAXAXISVALUE);
+
+		if (lAxisValueX < 0) newX *= -1;
+		if (lAxisValueY < 0) newY *= -1;
 
 		*pdwData = MAKELONG(w_Buttons,
-							MAKEWORD(	(BYTE)(min( max( MINAXISVALUE, (long)(lAxisValueX * d_ModifierX * dRel )), MAXAXISVALUE) / N64DIVIDER ),
-										(BYTE)(min( max( MINAXISVALUE, (long)(lAxisValueY * d_ModifierY * dRel )), MAXAXISVALUE) / N64DIVIDER )));
+							MAKEWORD((BYTE)(round(newX * d_ModifierX) / N64DIVIDER),
+											(BYTE)(round(newY * d_ModifierY) / N64DIVIDER)));
 	}
 	else
 	{

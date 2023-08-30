@@ -38,6 +38,7 @@ bool GetNControllerInput ( const int indexController, LPDWORD pdwData );
 
 BOOL CALLBACK EnumMakeDeviceList( LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef );
 
+long sclamp(long, long, long);
 bool IsBtnPressed(BUTTON btnButton);
 bool GetInputDevice( HWND hWnd, LPDIRECTINPUTDEVICE8 &lpDirectInputDevice, GUID gGuid, DWORD dwDevType, DWORD dwCooperativeLevel );
 void ReleaseDevice( LPDIRECTINPUTDEVICE8 &lpDirectInputDevice );
