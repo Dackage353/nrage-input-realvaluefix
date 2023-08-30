@@ -147,7 +147,7 @@ BOOL APIENTRY DllMain( HINSTANCE hModule, DWORD  ul_reason_for_call, LPVOID lpRe
 EXPORT void CALL GetDllInfo ( PLUGIN_INFO* PluginInfo )
 {
 	DebugWriteA("CALLED: GetDllInfo\n");
-	strncpy(PluginInfo->Name, STRING_PLUGINNAME " " VERSIONNUMBER
+	strncpy(PluginInfo->Name, STRING_PLUGINNAME
 #ifndef _UNICODE
 		"-ANSI"
 #endif
@@ -175,7 +175,7 @@ EXPORT void CALL DllAbout ( HWND hParent )
 
 	TCHAR szText[DEFAULT_BUFFER * 4] = _T(STRING_PLUGINNAME) _T("\n\n") \
 		_T("Forked at: >>https://github.com/libertyernie/nrage-input<<\n\n") \
-		_T("Version ") VERSIONINFO _T(" (") _T(__DATE__) _T(")\n") \
+		_T("V") VERSIONINFO _T(" (") _T(__DATE__) _T(")\n") \
 		_T("Original by N-Rage\n") \
 		_T("\n") \
 		_T(" - - - - -\n") \

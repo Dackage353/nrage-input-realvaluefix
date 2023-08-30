@@ -607,7 +607,7 @@ BOOL CALLBACK ControlsTabProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 	case WM_INITDIALOG:
 		// SetTicks on TrackBar
 		hDlgItem = GetDlgItem( hDlg, IDC_CTRRANGE );
-		SendMessage( hDlgItem, TBM_SETRANGE, (WPARAM) TRUE, (LPARAM) MAKELONG( 0, 100 ));
+		SendMessage( hDlgItem, TBM_SETRANGE, (WPARAM) TRUE, (LPARAM) MAKELONG( 0, 127 ));
 		SendMessage( hDlgItem, TBM_SETTICFREQ, (WPARAM) 10, 0 );
 		SendMessage( hDlgItem, TBM_SETPAGESIZE, (WPARAM) 0, 1 );
 
@@ -3805,7 +3805,7 @@ void SetControllerDefaults( LPCONTROLLER pcController )
 	freeModifiers( pcController );
 	ZeroMemory( pcController, sizeof(CONTROLLER) );
 
-	pcController->fRawData =			1;
+	pcController->fRawData =			0;
 	pcController->fRealN64Range =		1;
 	pcController->bRapidFireEnabled =	0;
 	pcController->bRapidFireRate =		3; // Set default rapid fire rate here

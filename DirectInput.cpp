@@ -154,8 +154,8 @@ bool GetNControllerInput ( const int indexController, LPDWORD pdwData )
 	long lAxisValueY = ZEROVALUE;
 
 	// take this info from the N64 controller struct, regardless of input devices
-	float d_ModifierX = (float)pcController->bStickRange / 100.0f;
-	float d_ModifierY = (float)pcController->bStickRange / 100.0f;
+	float d_ModifierX = (float)pcController->bStickRange / 127.0f;
+	float d_ModifierY = (float)pcController->bStickRange / 127.0f;
 
 	int i;
 
@@ -205,8 +205,8 @@ bool GetNControllerInput ( const int indexController, LPDWORD pdwData )
 			case MDT_MOVE:
 			{
 				LPMODSPEC_MOVE args = (LPMODSPEC_MOVE)&pcController->pModifiers[i].dwSpecific;
-				d_ModifierX *= args->XModification / 100.0f;
-				d_ModifierY *= args->YModification / 100.0f;	
+				d_ModifierX *= args->XModification / 127.0f;
+				d_ModifierY *= args->YModification / 127.0f;	
 			}
 				break;
 			case MDT_MACRO:
@@ -514,7 +514,7 @@ bool GetNControllerInput ( const int indexController, LPDWORD pdwData )
 		double lAbsoluteY = ( lAxisValueY > 0 ) ? lAxisValueY : -lAxisValueY;
 
 		double range = 127.0;
-		double diagonalPercent = 0.16;
+		double diagonalPercent = 0.176;
 		double diagonalMax = range * diagonalPercent;
 
 		double newX = lAbsoluteX * range / MAXAXISVALUE;

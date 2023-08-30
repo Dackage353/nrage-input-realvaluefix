@@ -536,12 +536,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "Release Version"
             VALUE "FileDescription", "Zilmar Spec Plugin for N64 Emulators"
-            VALUE "FileVersion", "2.3c"
-            VALUE "InternalName", "NRage_Input_V2"
+            VALUE "FileVersion", "2.4 (Real N64 Range fix)"
+            VALUE "InternalName", "NRage_V2.4 (Real N64 Range fix)"
             VALUE "LegalCopyright", "Copyright © 2001-2011 N-Rage, compiled under GPL licensing"
-            VALUE "OriginalFilename", "NRage_Input_V2.dll"
-            VALUE "ProductName", "NRage_Input_V2"
-            VALUE "ProductVersion", "2.3c"
+            VALUE "OriginalFilename", "NRage_V2.4 (Real N64 Range fix).dll"
+            VALUE "ProductName", "NRage_V2.4 (Real N64 Range fix)"
+            VALUE "ProductVersion", "2.4 (Real N64 Range fix)"
         END
     END
     BLOCK "VarFileInfo"
@@ -625,7 +625,7 @@ END
 STRINGTABLE 
 BEGIN
     IDS_C_POLLING           "...Awaiting Input %i..."
-    IDS_C_RANGE             "Range: %i%%"
+    IDS_C_RANGE             "Range (0-127): %i%"
     IDS_D_MSX               "Mouse Sensitivity X: %i%%"
     IDS_D_MSY               "Mouse Sensitivity Y: %i%%"
     IDS_D_DEADZONE          "Deadzone: %i%%"

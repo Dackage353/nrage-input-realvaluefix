@@ -30,7 +30,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 //General Plugin
 
-#define	STRING_PLUGINNAME "N-Rage Input Plugin V2"
+#define	STRING_PLUGINNAME "N-Rage V2.4 (Real N64 Range fix)"
 
 #define TIMER_MESSAGEWINDOW	123
 
@@ -39,8 +39,8 @@
 	// maximum number of modifiers
 #define MAX_MODIFIERS	256
 
-#define DEFAULT_STICKRANGE		66
-#define DEFAULT_DEADZONE		5
+#define DEFAULT_STICKRANGE		85
+#define DEFAULT_DEADZONE		0
 #define DEFAULT_RUMBLETYP		RUMBLE_EFF1
 #define DEFAULT_RUMBLESTRENGTH	80
 #define DEFAULT_MOUSESENSIVITY	100
