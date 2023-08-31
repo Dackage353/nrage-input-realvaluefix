@@ -154,6 +154,8 @@ bool GetNControllerInput ( const int indexController, LPDWORD pdwData )
 	long lAxisValueY = ZEROVALUE;
 
 	// take this info from the N64 controller struct, regardless of input devices
+
+
 	float d_ModifierX = (float)pcController->bStickRange / 127.0f;
 	float d_ModifierY = (float)pcController->bStickRange / 127.0f;
 
@@ -513,42 +515,53 @@ bool GetNControllerInput ( const int indexController, LPDWORD pdwData )
 		double lAbsoluteX = ( lAxisValueX > 0 ) ? lAxisValueX : -lAxisValueX;
 		double lAbsoluteY = ( lAxisValueY > 0 ) ? lAxisValueY : -lAxisValueY;
 
-		double range = 127.0;
-		double diagonalPercent = 0.176;
-		double diagonalMax = range * diagonalPercent;
+		double range = (double)pcController->bStickRange;
+
+		double diagonalPercent = 0.824;
 
 		double newX = lAbsoluteX * range / MAXAXISVALUE;
 		double newY = lAbsoluteY * range / MAXAXISVALUE;
 
-		double lim_x = range - (abs(sclamp(newY, -diagonalMax, diagonalMax)));
-		double lim_y = range - (abs(sclamp(newX, -diagonalMax, diagonalMax)));
+		double angle = atan2(newY, newX);
 
-		if (lim_x < newX) {
-			newX = lim_x;
-			newY = newY * (lim_x / newX);
+		double slopeOfPoint = 0;
+		if (newX != 0)
+		{
+			slopeOfPoint = newY / newX;
 		}
-		if (-lim_x > newX) {
-			newX = -lim_x;
-			newY = newY * (-lim_x / newX);
-		}
-		if (lim_y < newY) {
-			newY = lim_y;
-			newX = newX * (lim_y / newY);
-		}
-		if (-lim_y > newY) {
-			newY = -lim_y;
-			newX = newX * (-lim_y / newY);
+		
+		
+		double maxXorY = max(newX, newY);
+		double diagonalXandY = maxXorY * diagonalPercent;
+		double slopeOfHexagonSide = 0;
+		double yInterceptOfHexagonSide = 0;
+
+		if (newX != 0)
+		{
+			if (angle >= 0 && angle <= PI1_4)
+			{
+				slopeOfHexagonSide = -4.6818;
+				yInterceptOfHexagonSide = -slopeOfHexagonSide * maxXorY;
+			}
+			else
+			{
+				slopeOfHexagonSide = -0.2136;
+				yInterceptOfHexagonSide = maxXorY;
+			}
+
+			newX = yInterceptOfHexagonSide / (slopeOfPoint - slopeOfHexagonSide);
+			newY = slopeOfPoint * newX;
 		}
 
-		newX = round((newX / range) * MAXAXISVALUE);
-		newY = round((newY / range) * MAXAXISVALUE);
-
+		newX = (newX / 127.0) * MAXAXISVALUE;
+		newY = (newY / 127.0) * MAXAXISVALUE;
+		
 		if (lAxisValueX < 0) newX *= -1;
 		if (lAxisValueY < 0) newY *= -1;
 
 		*pdwData = MAKELONG(w_Buttons,
-							MAKEWORD((BYTE)(round(newX * d_ModifierX) / N64DIVIDER),
-											(BYTE)(round(newY * d_ModifierY) / N64DIVIDER)));
+							MAKEWORD((BYTE)(round(newX) / N64DIVIDER),
+											(BYTE)(round(newY) / N64DIVIDER)));
 	}
 	else
 	{

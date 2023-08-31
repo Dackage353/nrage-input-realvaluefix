@@ -3805,7 +3805,7 @@ void SetControllerDefaults( LPCONTROLLER pcController )
 	freeModifiers( pcController );
 	ZeroMemory( pcController, sizeof(CONTROLLER) );
 
-	pcController->fRawData =			0;
+	pcController->fRawData =			1;
 	pcController->fRealN64Range =		1;
 	pcController->bRapidFireEnabled =	0;
 	pcController->bRapidFireRate =		3; // Set default rapid fire rate here
