@@ -1,4 +1,4 @@
 *.opensdf
 *.sdf
 *.suo
-Build/MSVC12/Win32
+Build/

@@ -521,23 +521,16 @@ bool GetNControllerInput ( const int indexController, LPDWORD pdwData )
 
 		double newX = lAbsoluteX * range / MAXAXISVALUE;
 		double newY = lAbsoluteY * range / MAXAXISVALUE;
-
-		double angle = atan2(newY, newX);
-
-		double slopeOfPoint = 0;
+		
 		if (newX != 0)
 		{
-			slopeOfPoint = newY / newX;
-		}
-		
-		
-		double maxXorY = max(newX, newY);
-		double diagonalXandY = maxXorY * diagonalPercent;
-		double slopeOfHexagonSide = 0;
-		double yInterceptOfHexagonSide = 0;
+			double angle = atan2(newY, newX);
+			double slopeOfPoint = newY / newX;
+			double maxXorY = max(newX, newY);
+			double diagonalXandY = maxXorY * diagonalPercent;
+			double slopeOfHexagonSide = 0;
+			double yInterceptOfHexagonSide = 0;
 
-		if (newX != 0)
-		{
 			if (angle >= 0 && angle <= PI1_4)
 			{
 				slopeOfHexagonSide = -4.6818;
